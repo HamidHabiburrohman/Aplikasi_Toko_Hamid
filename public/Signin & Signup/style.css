@@ -1,0 +1,362 @@
+/* Global & Body */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff;
+}
+
+.login-card-container {
+    display: flex;
+    width: 850px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px #686af639;
+    overflow: hidden;
+}
+
+/* Left Side (Login Form) */
+.left-card {
+    flex: 1;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    /* PENTING: DITAMBAHKAN UNTUK MEMPOSISIKAN .back-btn DENGAN BENAR */
+    position: relative; 
+}
+
+.logo {
+    position: absolute;
+    top: 50px;
+    left: 200px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    gap: 8px;
+    color: #333;
+}
+
+.logo img {
+    width: 24px;
+    height: 24px;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.title-login {
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.subtitle-login {
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    color: #777;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 280px;
+}
+
+/* Form */
+form {
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-group {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+    margin-bottom: 7px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 0 40px 0 30px; /* Padding disesuaikan untuk icon spinner */
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #1909ff;
+    box-shadow: 0 0 0 3px rgba(25, 9, 255, 0.2);
+    outline: none;
+}
+.form-group-up {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+    margin-bottom: 7px;
+}
+
+.form-group-up input {
+    width: 100%;
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 0 40px 0 30px; /* Padding disesuaikan untuk icon spinner */
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.form-group-up input:focus {
+    border-color: #1909ff;
+    box-shadow: 0 0 0 3px rgba(25, 9, 255, 0.2);
+    outline: none;
+}
+
+.password-group {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 14px;
+}
+
+/* Login Button */
+.btn-login {
+    width: 100%;
+    max-width: 280px;
+    height: 45px;
+    border-radius: 25px;
+    background: #1909ff;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+    margin-top: 15px;
+}
+
+.btn-login:hover {
+    background: #1506dd;
+}
+
+.divider {
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+    position: relative;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 280px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 35%;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+/* Social Login Buttons */
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.social-login button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.social-login button:hover {
+    background: #f0f2ff;
+    border-color: #1909ff;
+    color: #1909ff;
+}
+
+.social-login button:focus {
+    border-color: #1909ff;
+    box-shadow: 0 0 0 3px rgba(25, 9, 255, 0.2);
+    outline: none;
+}
+
+.social-login .icon {
+    width: 18px;
+    height: 18px;
+}
+
+.register {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.register a {
+    color: #5d50fe;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.forget-password {
+    width: 100%;
+    max-width: 280px;
+    text-align: right;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.forget-password a {
+    color: #5d50fe;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* Right Side (Video) */
+.right-card {
+    flex: 1;
+    position: relative;
+    border-radius: 0 20px 20px 0;
+}
+
+.bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    padding: 15px 15px;
+    border-radius: 50px;
+}
+
+/* Validation and Error Messages */
+.input-error {
+    border-color: #ef4444 !important;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.8rem;
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    text-align: left !important;
+    padding-left: 2px;
+    margin-bottom: 5px;
+}
+
+.error-message-laravel {
+    color: #ef4444;
+    font-size: 0.8rem;
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    text-align: left !important;
+    padding-left: 2px;
+    margin-left: 0;
+}
+
+.spinner-inline {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4f46e5;
+}
+
+
+.title-input {
+    /* Menjadikan elemen block agar bisa mengatur width, margin, dll. */
+    display: block; 
+    
+    /* Mengatur lebar agar menempati lebar form-group */
+    width: 100%; 
+    
+    /* Perataan teks ke kiri (sesuai tata letak form pada left-card) */
+    text-align: left; 
+    
+    /* Ukuran font */
+    font-size: 0.7rem; 
+    
+    /* Berat font (bisa 500 atau 600 untuk penekanan) */
+    font-weight: 600; 
+    
+    /* Warna teks */
+    color: #5d5d5d; 
+    
+    /* Jarak di bawah label sebelum input */
+    margin-bottom: 5px; 
+}

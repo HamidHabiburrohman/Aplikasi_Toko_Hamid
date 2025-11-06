@@ -3,92 +3,100 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LandingPageController;
-use App\Http\Controllers\SigninController;
-use App\Http\Controllers\SignupController;
+use App\Http\Controllers\ProfileController;
 
-// Admin Controllers
-use App\Http\Controllers\admin\ProdukController;
-use App\Http\Controllers\admin\BarangMasukController;
-use App\Http\Controllers\admin\BarangKeluarController;
-use App\Http\Controllers\admin\KategoriController;
-use App\Http\Controllers\admin\SupplierController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Auth\SigninController;
+use App\Http\Controllers\Auth\SignupController;
+use App\Http\Controllers\AuthValidationController; 
 
-// Kasir Controllers (Perlu Anda buat sendiri)
-use App\Http\Controllers\kasir\DashboardController as KasirDashboardController;
-use App\Http\Controllers\kasir\TransaksiController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\DiskonController;
+use App\Http\Controllers\Admin\MetodePembayaranController;
+use App\Http\Controllers\Admin\ProdukMasukController;
+use App\Http\Controllers\Admin\ProdukKeluarController;
+use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\KasirController as AdminKasirController;
+use App\Http\Controllers\Admin\MemberController as AdminMemberController;
 
-// Member Controllers
-use App\Http\Controllers\member\DashboardController as MemberDashboardController;
-use App\Http\Controllers\member\ProdukMemberController;
-use App\Http\Controllers\member\RiwayatTransaksiController;
+use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
+use App\Http\Controllers\Kasir\PenjualanController;
+use App\Http\Controllers\Kasir\KategoriController as KasirKategoriController;
+use App\Http\Controllers\Kasir\TransaksiController;
+use App\Http\Controllers\Kasir\KasirProfileController;
+use App\Http\Controllers\Kasir\ProdukController as KasirProdukController;
 
+use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\Member\MemberProfileController;
+use App\Http\Controllers\Member\RiwayatController;
+use App\Http\Controllers\Member\ProdukMemberController;
+use App\Http\Controllers\Member\KeranjangBelanjaController;
+use App\Http\Controllers\Member\DetailBelanjaController;
 
-// Landing Page
-Route::get('/', function () {
-    return view('admin.dashboard'); // Menggunakan 'kebab-case' untuk nama view yang lebih standar
-})->name('landing');
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
-// Authentication (Guest Middleware)
-Route::middleware('guest')->group(function () {
-    Route::get('/signin', [SigninController::class, 'showsignin'])->name('signin');
-    Route::post('/signin', [SigninController::class, 'actionsignin'])->name('signin.action');
-
-    Route::get('/signup', [SignupController::class, 'index'])->name('signup.index');
-    Route::post('/signup', [SignupController::class, 'store'])->name('signup.store');
+Route::controller(SignupController::class)->group(function () {
+    Route::get('signup', 'index')->name('signup');
+    Route::post('action-signup', 'store')->name('action-signup');
 });
 
-// Logout
-Route::post('/logout', [SigninController::class, 'actionlogout'])->name('logout')->middleware('auth');
-
-// Default Redirect After Login (Menggantikan konflik rute '/')
-Route::get('/home', function () {
-    if (auth()->check()) {
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard.index');
-        } elseif (auth()->user()->role === 'kasir') {
-            return redirect()->route('kasir.dashboard.index');
-        } elseif (auth()->user()->role === 'member') {
-            return redirect()->route('member.dashboard.index');
-        }
-    }
-    // Jika auth gagal atau role tidak dikenal, arahkan ke landing page
-    return redirect()->route('landing');
-})->name('home');
-
-// Admin Routes
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard.index');
-
-    Route::resources([
-        'produk' => ProdukController::class,
-        'barang_masuk' => BarangMasukController::class,
-        'barang_keluar' => BarangKeluarController::class,
-        'kategori' => KategoriController::class,
-        'supplier' => SupplierController::class,
-        'user' => UserController::class,
-    ]);
+Route::controller(SigninController::class)->group(function () {
+    Route::get('signin', 'showSignin')->name('signin');
+    Route::post('action-signin', 'actionsignin')->name('action-signin');
+    Route::get('action-logout', 'actionlogout')->name('action-logout');
 });
 
-/* Kasir Routes
-Route::middleware(['auth', 'role:kasir'])->prefix('kasir')->as('kasir.')->group(function () {
-    Route::get('/dashboard', [KasirDashboardController::class, 'index'])->name('dashboard.index');
+Route::post('validate-field-realtime', [AuthValidationController::class, 'validateField']);
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    Route::get('/beranda', [AdminDashboardController::class, 'index'])->name('beranda');
+    Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    
+    // PERBAIKAN: Dikembalikan ke penamaan ASLI Anda 'pengguna'
+    Route::resource('pengguna', UserController::class); 
+    Route::resource('kasir', AdminKasirController::class);
+    Route::resource('member', AdminMemberController::class);
+
+    Route::resource('produk', ProdukController::class);
+    Route::resource('kategori', KategoriController::class);
+    Route::resource('pemasok', SupplierController::class);
+    Route::resource('diskon', DiskonController::class);
+    Route::resource('metode-pembayaran', MetodePembayaranController::class);
+    
+    Route::resource('produk_masuk', ProdukMasukController::class);
+    Route::resource('produk_keluar', ProdukKeluarController::class);
+});
+
+
+Route::middleware(['auth', 'role:kasir'])->prefix('kasir')->name('kasir.')->group(function () {
+    Route::get('/beranda', [KasirDashboardController::class, 'index'])->name('beranda');
+    Route::get('profil', [KasirProfileController::class, 'index'])->name('profil');
+
+    Route::resource('produk', KasirProdukController::class);
     Route::resource('transaksi', TransaksiController::class);
-    Route::get('/laporan', [TransaksiController::class, 'laporan'])->name('laporan.index');
-}); */
-
-// Member Routes
-Route::middleware(['auth', 'role:member'])->prefix('member')->as('member.')->group(function () {
+    Route::resource('penjualan', PenjualanController::class)->only(['index', 'show']);
     
-    
-    
-    Route::get('/riwayat-transaksi', [RiwayatTransaksiController::class, 'index'])->name('riwayat-transaksi.index');
-    Route::get('/riwayat-transaksi/{id}', [RiwayatTransaksiController::class, 'show'])->name('riwayat-transaksi.show');
-
-    // Grouping rute produk untuk member
-    Route::prefix('produk')->as('produk.')->group(function () {
-        Route::get('/', [ProdukMemberController::class, 'index'])->name('index');
-        Route::get('/{barang}', [ProdukMemberController::class, 'show'])->name('show');
-    });
+    Route::get('produk', [KasirProdukController::class, 'index'])->name('produk.index');
+    Route::get('kategori', [KategoriController::class, 'index'])->name('kategori.index');
 });
+
+
+Route::middleware(['auth', 'role:member'])->prefix('member')->name('member.')->group(function () {
+    Route::get('/beranda', [MemberDashboardController::class, 'index'])->name('beranda');
+    Route::get('profil', [MemberProfileController::class, 'index'])->name('profil');
+    Route::get('riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+
+    Route::resource('produk_member', ProdukMemberController::class);
+    Route::resource('keranjang', KeranjangBelanjaController::class);
+    Route::resource('detail_belanja', DetailBelanjaController::class);
+});
+
+require __DIR__.'/auth.php';

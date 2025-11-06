@@ -32,7 +32,7 @@
   --bs-primary: #e91e63;
   --bs-secondary: #737373;
   --bs-success: #4CAF50;
-  --bs-info: #1A73E8;
+  --bs-info: #2C48FF;
   --bs-warning: #fb8c00;
   --bs-danger: #F44335;
   --bs-light: #e5e5e5;
@@ -11108,7 +11108,7 @@ fieldset:disabled .btn {
 }
 
 .text-info {
-  color: #1A73E8 !important;
+  color: #2C48FF !important;
 }
 
 .text-warning {
@@ -21609,7 +21609,7 @@ fieldset:disabled .btn {
 }
 
 .alert-info {
-  background-image: linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%);
+  background-image: linear-gradient(195deg, #49a3f1 0%, #2C48FF 100%);
 }
 
 .alert-warning {
@@ -21744,7 +21744,7 @@ fieldset:disabled .btn {
 }
 
 .badge.bg-info {
-  background: #1A73E8;
+  background: #2C48FF;
 }
 
 .badge.bg-warning {
@@ -24017,7 +24017,7 @@ label,
 }
 
 .bg-gradient-info {
-  background-image: linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%);
+  background-image: linear-gradient(195deg, #49a3f1 0%, #2C48FF 100%);
 }
 
 .bg-gradient-warning {

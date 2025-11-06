@@ -1,0 +1,332 @@
+/* SweetAlert Custom Styles */
+.my-swal-popup {
+    border-radius: 20px !important;
+    padding: 20px;
+}
+
+.my-confirm,
+.my-cancel {
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: bold;
+    margin: 0 8px;
+}
+
+.my-confirm {
+    background: #222;
+    color: #fff;
+    border: none;
+}
+
+.my-confirm :hover {
+    background: #000;
+    color: #fff;
+    border: none;
+}
+
+.my-confirm-ok {
+    background: #333;
+    color: #fff;
+    border: none;
+}
+
+.my-cancel {
+    background: #e2e2e2;
+    color: #505050;
+    border: none;
+}
+
+/* Style pages */
+
+.card {
+    border-radius: 20px !important;
+}
+/* ======= GENERAL BUTTON STYLE ======= */
+.button-modern {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 12px;
+    padding: 0.6rem 1.4rem;
+    font-size: 0.9rem;
+    border: 1px solid #e0e0e0;
+    transition: all 0.25s ease-in-out;
+}
+
+/* ======= CREATE BUTTON ======= */
+.button-create {
+    background-color: #292929;
+    color: #fafafa;
+    margin: 30px 30px 10px 10px;
+    border: 1px solid #292929;
+}
+
+.button-create:hover {
+    background-color: #151414;
+    color: #ffffff;
+    margin: 30px 30px 10px 10px;
+    border-color: #151414;
+}
+
+/* ======= EDIT BUTTON ======= */
+.button-edit {
+    background-color: #ffffff;
+    color: #333333;
+    margin: 5px 0px 10px 10px;
+    border: 1px solid #cfcfcf;
+}
+
+.button-edit:hover {
+    background-color: #333333;
+    color: #ffffff;
+    border-color: #333333;
+}
+
+/* ======= DELETE BUTTON ======= */
+.button-delete {
+    background-color: #ffffff;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.button-delete:hover {
+    background-color: #e74c3c;
+    color: #ffffff;
+    border-color: #e74c3c;
+}
+
+/* ======= ICON INSIDE DELETE ======= */
+.button-delete i {
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+/* ======= TRANSITION FEEL ======= */
+button {
+    transition: all 0.3s ease;
+}
+
+/* ====== MODERN MINIMALIST MODAL ====== */
+.modern-modal {
+    border-radius: 16px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.button-modern-close {
+    filter: invert(0.5);
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.button-modern-close:hover {
+    opacity: 1;
+    filter: invert(0);
+}
+
+.input-modern {
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+}
+
+.input-modern:focus {
+    border-color: #000;
+    box-shadow: none;
+}
+
+.button-modern {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+    padding: 0.55rem 1.4rem;
+    font-size: 0.9rem;
+    transition: all 0.25s ease-in-out;
+}
+
+.button-cancel {
+    background-color: #fff;
+    color: #555;
+    border: 1px solid #ccc;
+    margin-right: 0.4rem;
+}
+
+.button-cancel:hover {
+    background-color: #f5f5f5;
+    color: #000;
+}
+
+.button-update {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+}
+
+.button-update:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.button-created {
+    background-color: #222121;
+    color: #fff;
+    border: 1px solid #222121;
+}
+
+.button-created:hover {
+    background-color: #171717;
+    color: #fff;
+}
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+
+.modal.fade .modal-dialog {
+    transform: translate(0, -10px);
+    transition: all 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: translate(0, 0);
+}
+
+.modal-header,
+.modal-footer {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.modal-body {
+    padding: 1rem 1.5rem;
+}
+
+/* Base Card Style */
+.glass-card {
+    /* Bentuk dan Ukuran */
+    border-radius: 30px; /* Sudut membulat */
+    padding: 25px;
+    width: 250px; /* Sesuaikan lebar jika perlu */
+    box-sizing: border-box;
+
+    /* Efek Glassmorphism Inti */
+    background: rgba(255, 255, 255, 0.799); /* Background putih transparan */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow lembut */
+    backdrop-filter: blur(10px); /* Efek Blur */
+    -webkit-backdrop-filter: blur(10px); /* Dukungan untuk Safari */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Border semi-transparan */
+
+    /* Transparansi dan Gradient Warna (Penting) */
+    position: relative; /* Untuk penempatan pseudo-element */
+    overflow: hidden; /* Agar pseudo-element tidak keluar */
+}
+
+/* Gradient Warna (Tint/Lapisan Warna) */
+.glass-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.15; /* Tingkat kejelasan warna */
+    pointer-events: none;
+    z-index: -1; /* Di belakang konten card */
+    border-radius: 20px;
+}
+
+/* Card Hijau (Kiri) */
+.green-tint::before {
+    background: linear-gradient(
+        150deg,
+        #ffffff,
+        #66ef66
+    ); /* Hijau muda ke hijau tua */
+}
+
+/* Card Merah (Kanan) */
+.red-tint::before {
+    background: linear-gradient(
+        150deg,
+        #ffffff,
+        #cc0000
+    ); /* Merah muda ke merah tua */
+}
+
+/* Card Header (Judul dan Icon) */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.card-main-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333; /* Warna gelap untuk judul */
+}
+
+.card-subtitle {
+    font-size: 12px;
+    color: #666; /* Warna abu-abu untuk subjudul */
+}
+
+/* Icon Panah */
+.card-icon {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+    transform: rotate(-45deg); /* Memutar panah ke kanan atas */
+}
+
+/* Base style untuk ikon panah SVG */
+.arrow-icon {
+    width: 28px; /* Ukuran ikon */
+    height: 28px;
+    transition: transform 0.3s ease; /* Animasi lembut saat berubah arah */
+    vertical-align: middle; /* Memastikan icon sejajar dengan teks jika ada */
+}
+
+/* Style untuk panah NAIK (hijau dan diputar) */
+.up-arrow {
+    transform: rotate(45deg); /* Putar ke kanan atas */
+    filter: invert(30%) sepia(80%) saturate(1500%) hue-rotate(80deg)
+        brightness(90%); /* Mengubah SVG menjadi hijau */
+}
+
+/* Style untuk panah TURUN (merah dan diputar ke bawah) */
+.down-arrow {
+    transform: rotate(-135deg); /* Putar ke kanan bawah */
+    filter: invert(15%) sepia(95%) saturate(7000%) hue-rotate(200deg) brightness(90%);
+}
+/* Card Body (Persentase dan Label Bawah) */
+.card-body {
+    text-align: left;
+}
+
+.card-percentage {
+    font-size: 60px;
+    font-weight: 700; /* Sangat tebal */
+    margin-bottom: 5px;
+    line-height: 1;
+}
+
+.green-text {
+    color: #00cc00; /* Warna persentase hijau */
+}
+
+.red-text {
+    color: #cc0000; /* Warna persentase merah */
+}
+
+.card-label {
+    font-size: 16px;
+    color: #333;
+    margin-top: 15px;
+}
