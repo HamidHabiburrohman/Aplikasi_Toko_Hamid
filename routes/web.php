@@ -59,7 +59,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     Route::get('/beranda', [AdminDashboardController::class, 'index'])->name('beranda');
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
-    
+    Route::get('laporan/export-pdf', [LaporanController::class, 'exportPDF'])->name('laporan.export-pdf');
+    Route::get('laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.export-excel');
+    Route::get('laporan/produk-terlaris', [LaporanController::class, 'produkTerlaris'])->name('laporan.produk-terlaris');
+    Route::get('laporan/member-aktif', [LaporanController::class, 'memberAktif'])->name('laporan.member-aktif');
     // PERBAIKAN: Dikembalikan ke penamaan ASLI Anda 'pengguna'
     Route::resource('pengguna', UserController::class); 
     Route::resource('kasir', AdminKasirController::class);

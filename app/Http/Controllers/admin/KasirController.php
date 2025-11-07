@@ -12,7 +12,9 @@ class KasirController extends Controller
 {
     public function index()
     {
-        $kasir = User::with('kasir')->where('role', 'kasir')->get();
+        $kasir = User::with('kasir')
+            ->whereHas('kasir')
+            ->get();
         return view('admin.kasir.index', compact('kasir'));
     }
 
@@ -22,8 +24,9 @@ class KasirController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'username' => 'required|string|max:100|unique:kasirs,username', // pastikan tabelnya kasirs (plural)
+            'username' => 'required|string|max:100|unique:kasirs,username',
             'telepon'  => 'required|numeric|digits_between:10,15',
+            'role'     => 'required|in:admin,kasir,member', // ✅ TAMBAH ROLE
         ]);
 
         try {
@@ -32,16 +35,18 @@ class KasirController extends Controller
                     'name'     => $validated['name'],
                     'email'    => $validated['email'],
                     'password' => bcrypt($validated['password']),
-                    'role'     => 'kasir',
+                    'role'     => $validated['role'], // ✅ GUNAKAN ROLE DARI INPUT
                 ]);
 
                 $user->kasir()->create([
+                    'nama' => $validated['name'],
                     'username' => $validated['username'],
                     'telepon'  => $validated['telepon'],
+                    'alamat' => null,
                 ]);
             });
 
-            return redirect()->route('admin.kasir.index')->with('success', 'Kasir berhasil ditambahkan');
+            return redirect()->route('admin.kasir.index')->with('create', 'Kasir berhasil ditambahkan');
             
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menambah kasir: ' . $e->getMessage());
@@ -50,7 +55,7 @@ class KasirController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::where('role', 'kasir')->findOrFail($id);
+        $user = User::findOrFail($id);
 
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
@@ -58,6 +63,7 @@ class KasirController extends Controller
             'username' => 'required|string|max:100|unique:kasirs,username,' . $user->kasir->id,
             'telepon'  => 'required|numeric|digits_between:10,15',
             'password' => 'nullable|string|min:8|confirmed',
+            'role'     => 'required|in:admin,kasir,member', // ✅ TAMBAH ROLE
         ]);
 
         try {
@@ -65,6 +71,7 @@ class KasirController extends Controller
                 $updateData = [
                     'name'  => $validated['name'],
                     'email' => $validated['email'],
+                    'role'  => $validated['role'], // ✅ UPDATE ROLE
                 ];
 
                 if (!empty($validated['password'])) {
@@ -74,12 +81,13 @@ class KasirController extends Controller
                 $user->update($updateData);
 
                 $user->kasir->update([
+                    'nama' => $validated['name'],
                     'username' => $validated['username'],
                     'telepon'  => $validated['telepon'],
                 ]);
             });
 
-            return redirect()->route('admin.kasir.index')->with('success', 'Data kasir berhasil diperbarui');
+            return redirect()->route('admin.kasir.index')->with('edit', 'Data kasir berhasil diperbarui');
             
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal update kasir: ' . $e->getMessage());
@@ -89,14 +97,14 @@ class KasirController extends Controller
     public function destroy($id)
     {
         try {
-            $user = User::where('role', 'kasir')->findOrFail($id);
+            $user = User::findOrFail($id);
             
             DB::transaction(function () use ($user) {
                 $user->kasir()->delete();
                 $user->delete();
             });
 
-            return redirect()->route('admin.kasir.index')->with('success', 'Kasir berhasil dihapus');
+            return redirect()->route('admin.kasir.index')->with('delete', 'Kasir berhasil dihapus');
             
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menghapus kasir: ' . $e->getMessage());

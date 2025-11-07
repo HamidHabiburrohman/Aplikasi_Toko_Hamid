@@ -19,6 +19,7 @@
                                 <th>Email</th>
                                 <th>Username</th>
                                 <th>Telepon</th>
+                                <th>Role</th> <!-- ✅ TAMBAH KOLOM ROLE -->
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -31,17 +32,32 @@
                                     <td>{{ $s->kasir->username ?? '-' }}</td>
                                     <td>{{ $s->kasir->telepon ?? '-' }}</td>
                                     <td>
-                                        <button class="btn btn-warning btn-rounded btn-sm edit-btn" data-id="{{ $s->id }}"
-                                            data-name="{{ $s->name }}" data-email="{{ $s->email }}"
-                                            data-username="{{ $s->kasir->username ?? '' }}"
-                                            data-telepon="{{ $s->kasir->telepon ?? '' }}" data-bs-toggle="modal"
-                                            data-bs-target="#editModal">
-                                            Edit
-                                        </button>
-                                        <button class="btn btn-danger btn-rounded btn-sm delete-btn" data-id="{{ $s->id }}"
-                                            data-name="{{ $s->name }}">
-                                            Delete
-                                        </button>
+                                        <span class="badge 
+                                        @if($s->role == 'admin') bg-danger
+                                        @elseif($s->role == 'kasir') bg-warning
+                                        @else bg-info @endif">
+                                            {{ ucfirst($s->role) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if($s->kasir)
+                                            <button class="btn btn-warning btn-rounded btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#editModal-{{ $s->id }}">
+                                                Edit
+                                            </button>
+                                        @else
+                                            <button class="btn btn-secondary btn-rounded btn-sm" disabled>
+                                                No Data
+                                            </button>
+                                        @endif
+                                        <form action="{{ route('admin.kasir.destroy', $s->id) }}" method="POST"
+                                            style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-rounded btn-sm">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -52,6 +68,7 @@
         </div>
     </div>
 
+    <!-- Create Modal -->
     <!-- Create Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -66,27 +83,59 @@
                     <div class="modal-body pt-3">
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama kasir:</label>
-                            <input type="text" id="name" name="name" class="form-control input-modern"
+                            <input type="text" id="name" name="name"
+                                class="form-control input-modern @error('name') is-invalid @enderror"
                                 value="{{ old('name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
-                            <input type="email" id="email" name="email" class="form-control input-modern"
+                            <input type="email" id="email" name="email"
+                                class="form-control input-modern @error('email') is-invalid @enderror"
                                 value="{{ old('email') }}" required>
+                            @error('email')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label">Username:</label>
-                            <input type="text" id="username" name="username" class="form-control input-modern"
+                            <input type="text" id="username" name="username"
+                                class="form-control input-modern @error('username') is-invalid @enderror"
                                 value="{{ old('username') }}" required>
+                            @error('username')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="telepon" class="form-label">Telepon:</label>
-                            <input type="text" id="telepon" name="telepon" class="form-control input-modern"
+                            <input type="text" id="telepon" name="telepon"
+                                class="form-control input-modern @error('telepon') is-invalid @enderror"
                                 value="{{ old('telepon') }}" required>
+                            @error('telepon')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role:</label>
+                            <select name="role" class="form-control input-modern @error('role') is-invalid @enderror"
+                                required>
+                                <option value="kasir" {{ old('role') == 'kasir' ? 'selected' : '' }}>Kasir</option>
+                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="member" {{ old('role') == 'member' ? 'selected' : '' }}>Member</option>
+                            </select>
+                            @error('role')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password:</label>
-                            <input type="password" id="password" name="password" class="form-control input-modern" required>
+                            <input type="password" id="password" name="password"
+                                class="form-control input-modern @error('password') is-invalid @enderror" required>
+                            @error('password')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="password_confirmation" class="form-label">Confirm Password:</label>
@@ -103,115 +152,106 @@
         </div>
     </div>
 
-    <!-- Edit Modal (Single Modal) -->
+    <!-- Edit Modals -->
     @foreach ($kasir as $s)
-        <!-- Modal Edit untuk setiap kasir -->
-        <div class="modal fade" id="editModal-{{ $s->id }}" tabindex="-1" aria-labelledby="editModalLabel-{{ $s->id }}"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modern-modal">
-                    <div class="modal-header align-items-center border-0 pb-0">
-                        <h1 class="modal-title fs-5 fw-regular text-dark mb-0" id="editModalLabel-{{ $s->id }}">
-                            Edit Kasir
-                        </h1>
-                        <button type="button" class="btn-close btn-modern-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+        @if($s->kasir)
+            <div class="modal fade" id="editModal-{{ $s->id }}" tabindex="-1" aria-labelledby="editModalLabel-{{ $s->id }}"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content modern-modal">
+                        <div class="modal-header align-items-center border-0 pb-0">
+                            <h1 class="modal-title fs-5 fw-regular text-dark mb-0" id="editModalLabel-{{ $s->id }}">
+                                Edit Kasir
+                            </h1>
+                            <button type="button" class="btn-close btn-modern-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+
+                        <form action="{{ route('admin.kasir.update', $s->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-body pt-3">
+                                <div class="mb-3">
+                                    <label for="edit_name_{{ $s->id }}" class="form-label text-muted fw-regular">Nama kasir:</label>
+                                    <input type="text" class="form-control input-modern @error('name') is-invalid @enderror"
+                                        id="edit_name_{{ $s->id }}" name="name" value="{{ old('name', $s->name) }}" required>
+                                    @error('name')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_email_{{ $s->id }}" class="form-label text-muted fw-regular">Email:</label>
+                                    <input type="email" class="form-control input-modern @error('email') is-invalid @enderror"
+                                        id="edit_email_{{ $s->id }}" name="email" value="{{ old('email', $s->email) }}" required>
+                                    @error('email')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_username_{{ $s->id }}"
+                                        class="form-label text-muted fw-regular">Username:</label>
+                                    <input type="text" class="form-control input-modern @error('username') is-invalid @enderror"
+                                        id="edit_username_{{ $s->id }}" name="username"
+                                        value="{{ old('username', $s->kasir->username) }}" required>
+                                    @error('username')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_telepon_{{ $s->id }}" class="form-label text-muted fw-regular">Telepon:</label>
+                                    <input type="text" class="form-control input-modern @error('telepon') is-invalid @enderror"
+                                        id="edit_telepon_{{ $s->id }}" name="telepon"
+                                        value="{{ old('telepon', $s->kasir->telepon) }}" required>
+                                    @error('telepon')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_role_{{ $s->id }}" class="form-label text-muted fw-regular">Role:</label>
+                                    <select name="role" class="form-control input-modern @error('role') is-invalid @enderror"
+                                        id="edit_role_{{ $s->id }}" required>
+                                        <option value="kasir" {{ old('role', $s->role) == 'kasir' ? 'selected' : '' }}>Kasir</option>
+                                        <option value="admin" {{ old('role', $s->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="member" {{ old('role', $s->role) == 'member' ? 'selected' : '' }}>Member
+                                        </option>
+                                    </select>
+                                    @error('role')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_password_{{ $s->id }}" class="form-label text-muted fw-regular">Password
+                                        (kosongkan jika tidak diubah):</label>
+                                    <input type="password" class="form-control input-modern @error('password') is-invalid @enderror"
+                                        id="edit_password_{{ $s->id }}" name="password">
+                                    @error('password')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit_password_confirmation_{{ $s->id }}"
+                                        class="form-label text-muted fw-regular">Confirm Password:</label>
+                                    <input type="password" class="form-control input-modern"
+                                        id="edit_password_confirmation_{{ $s->id }}" name="password_confirmation">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer d-flex justify-content-end align-items-center border-0 pt-0">
+                                <button type="button" class="button-modern button-cancel" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="button-modern button-update">Update</button>
+                            </div>
+                        </form>
                     </div>
-
-                    <form action="{{ route('admin.kasir.update', $s->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-body pt-3">
-                            <div class="mb-3">
-                                <label for="edit_name_{{ $s->id }}" class="form-label text-muted fw-regular">Nama kasir:</label>
-                                <input type="text" class="form-control input-modern @error('name') is-invalid @enderror"
-                                    id="edit_name_{{ $s->id }}" name="name" value="{{ old('name', $s->name) }}">
-                                @error('name')
-                                    <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="edit_email_{{ $s->id }}" class="form-label text-muted fw-regular">Email:</label>
-                                <input type="email" class="form-control input-modern @error('email') is-invalid @enderror"
-                                    id="edit_email_{{ $s->id }}" name="email" value="{{ old('email', $s->email) }}">
-                                @error('email')
-                                    <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="edit_username_{{ $s->id }}"
-                                    class="form-label text-muted fw-regular">Username:</label>
-                                <input type="text" class="form-control input-modern @error('username') is-invalid @enderror"
-                                    id="edit_username_{{ $s->id }}" name="username"
-                                    value="{{ old('username', $s->kasir->username ?? '') }}">
-                                @error('username')
-                                    <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="edit_telepon_{{ $s->id }}" class="form-label text-muted fw-regular">Telepon:</label>
-                                <input type="text" class="form-control input-modern @error('telepon') is-invalid @enderror"
-                                    id="edit_telepon_{{ $s->id }}" name="telepon"
-                                    value="{{ old('telepon', $s->kasir->telepon ?? '') }}">
-                                @error('telepon')
-                                    <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="edit_password_{{ $s->id }}" class="form-label text-muted fw-regular">Password
-                                    (kosongkan jika tidak diubah):</label>
-                                <input type="password" class="form-control input-modern @error('password') is-invalid @enderror"
-                                    id="edit_password_{{ $s->id }}" name="password">
-                                @error('password')
-                                    <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="edit_password_confirmation_{{ $s->id }}"
-                                    class="form-label text-muted fw-regular">Confirm Password:</label>
-                                <input type="password" class="form-control input-modern"
-                                    id="edit_password_confirmation_{{ $s->id }}" name="password_confirmation">
-                            </div>
-                        </div>
-
-                        <div class="modal-footer d-flex justify-content-end align-items-center border-0 pt-0">
-                            <button type="button" class="button-modern button-cancel" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="button-modern button-update">Update</button>
-                        </div>
-                    </form>
                 </div>
             </div>
-        </div>
+        @endif
     @endforeach
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modern-modal">
-                <div class="modal-header align-items-center border-0 pb-0">
-                    <h1 class="modal-title fs-5 fw-regular text-dark mb-0">Confirm Delete</h1>
-                    <button type="button" class="btn-close btn-modern-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body pt-3">
-                    <p>Are you sure you want to delete <strong id="deleteKasirName"></strong>?</p>
-                </div>
-                <div class="modal-footer d-flex justify-content-end align-items-center border-0 pt-0">
-                    <button type="button" class="button-modern button-cancel" data-bs-dismiss="modal">Cancel</button>
-                    <form method="POST" id="deleteForm">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="button-modern button-danger">Delete</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('scripts')

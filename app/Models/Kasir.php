@@ -8,8 +8,10 @@ class Kasir extends Model
 {
     protected $fillable = [
         'username',
+        'nama', 
         'telepon',
-        'user_id'
+        'user_id',
+        'alamat'
     ];
 
     public function user()
